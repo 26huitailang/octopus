@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/26huitailang/octopus/app/console"
 	"github.com/26huitailang/octopus/app/http"
+	"github.com/26huitailang/octopus/app/provider/agent"
 	"github.com/26huitailang/octopus/app/provider/demo"
 	"github.com/26huitailang/yogo/framework"
 	"github.com/26huitailang/yogo/framework/provider/app"
@@ -30,6 +31,7 @@ func main() {
 	container.Bind(&cache.YogoCacheProvider{})
 	container.Bind(&ssh.SSHProvider{})
 	container.Bind(&demo.DemoProvider{})
+	container.Bind(&agent.AgentProvider{})
 
 	if engine, err := http.NewHttpEngine(container); err == nil {
 		container.Bind(&kernel.YogoKernelProvider{HttpEngine: engine})

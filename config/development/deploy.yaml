@@ -1,7 +1,7 @@
 connections: # 要自动化部署的连接
   - ssh.web-01
 
-remote_folder: "/home/lighthouse/yogodemo/" # 远端的部署文件夹
+remote_folder: "/home/parallels/octopus/" # 远端的部署文件夹
 
 frontend: # 前端部署配置
   pre_action: # 部署前置命令
@@ -10,14 +10,16 @@ frontend: # 前端部署配置
     - "pwd"
 
 backend: # 后端部署配置
-  use_docker: true # 使用docker的命令
+  bin: "octopus" # 自定义构建二进制文件名，默认yogo
+  use_docker: false # 使用docker的命令
   image: golang:1.18-rc
   goos: linux # 部署目标操作系统
   goarch: amd64 # 部署目标cpu架构
   cgo: 1 # CGO_ENABLED
-  cc: x86_64-linux-musl-gcc
+  cc: x86_64-unknown-linux-gnu-gcc
   pre_action: # 部署前置命令
     - "pwd"
+    - "systemctl stop octopus-agent"
   post_action: # 部署后置命令
-    - "chmod 777 /home/lighthouse/yogodemo/yogo"
-    - "/home/lighthouse/yogodemo/yogo app restart"
+    - chmod 777 /home/parallels/octopus/octopus
+    - cd /home/parallels/octopus && ./octopus agent register
