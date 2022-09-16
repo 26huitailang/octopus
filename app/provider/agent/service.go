@@ -1,14 +1,18 @@
 package agent
 
 import (
+	"bytes"
+	"context"
 	"fmt"
 	"html/template"
+	"io"
 	"os"
 	"os/exec"
 	"path"
 
 	"github.com/26huitailang/yogo/framework"
 	"github.com/26huitailang/yogo/framework/contract"
+	"github.com/google/shlex"
 )
 
 type Service struct {
@@ -111,6 +115,33 @@ func (s *Service) Status() error {
 		return err
 	}
 	fmt.Println(string(out))
+	return nil
+}
+
+func (s *Service) RunScript(script []byte, writer io.Writer) error {
+	logger := s.c.MustMake(contract.LogKey).(contract.Log)
+	logger.Debug(context.TODO(), "got script, start parse", map[string]interface{}{"scirpt": string(script)})
+	cmds := bytes.Split(script, []byte("\n"))
+	for _, cmd := range cmds {
+		ret, err := shlex.Split(string(cmd))
+		if err != nil {
+			return err
+		}
+		var command *exec.Cmd
+		logger.Debug(context.TODO(), "get command", map[string]interface{}{"ret": ret})
+		if len(ret) == 0 {
+			continue
+		} else if len(ret) == 1 {
+			command = exec.Command(ret[0])
+		} else {
+			command = exec.Command(ret[0], ret[1:]...)
+		}
+		out, _ := command.CombinedOutput()
+		_, err = writer.Write(out)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
