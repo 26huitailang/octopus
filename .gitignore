@@ -21,6 +21,7 @@ vendor/
 .DS_Store
 node_modules
 yogo
+octopus
 /dist
 
 
