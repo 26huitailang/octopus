@@ -136,8 +136,13 @@ func (s *Service) RunScript(script []byte, writer io.Writer) error {
 		} else {
 			command = exec.Command(ret[0], ret[1:]...)
 		}
-		out, _ := command.CombinedOutput()
-		_, err = writer.Write(out)
+		out, err := command.CombinedOutput()
+		if err != nil {
+			logger.Error(context.TODO(), "out:", map[string]interface{}{"out": string(out), "cmd": cmd})
+			return err
+		}
+		n, err := writer.Write(out)
+		logger.Debug(context.TODO(), "out:", map[string]interface{}{"out": string(out), "cmd": string(cmd), "n": n})
 		if err != nil {
 			return err
 		}

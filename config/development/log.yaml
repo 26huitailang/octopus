@@ -1,2 +1,2 @@
-driver: console 
+driver: rotate
 level: trace

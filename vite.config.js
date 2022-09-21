@@ -14,5 +14,13 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()],
     }),
-  ]
+  ],
+  server: {
+    proxy: {
+      '/agent/script': {
+        target: 'http://localhost:8072',
+        changeOrigin: true,
+      },
+    }
+  }
 })

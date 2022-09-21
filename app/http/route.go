@@ -1,6 +1,7 @@
 package http
 
 import (
+	"github.com/26huitailang/octopus/app/http/module/agent"
 	"github.com/26huitailang/octopus/app/http/module/demo"
 	"github.com/26huitailang/yogo/framework/contract"
 	"github.com/26huitailang/yogo/framework/gin"
@@ -20,4 +21,6 @@ func Routes(r *gin.Engine) {
 	}
 
 	demo.Register(r)
+	agent.Register(r)
+
 }
