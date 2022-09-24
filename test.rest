@@ -6,5 +6,10 @@ Content-Type: application/json
   "script": "pwd\nls -lh\nwhoami\n"
 }
 
-### test cache
-GET http://localhost:8888/demo/cache
+### list scripts
+GET http://localhost:8072/agent/scripts
+ontent-Type: application/json
+
+### detail script
+GET http://localhost:8072/agent/scripts/whoami.sh
+ontent-Type: application/json

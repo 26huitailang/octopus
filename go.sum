@@ -1,5 +1,5 @@
-github.com/26huitailang/yogo v0.1.1 h1:ekxppKhkJDYCVAw6dB4R72ZG3EiHtGV5KjTTB/x3Jdk=
-github.com/26huitailang/yogo v0.1.1/go.mod h1:wp9/vQYT7ZkrmiSqA+rWIQtzLDlC5J7wSIGneIGYzCc=
+github.com/26huitailang/yogo v0.1.2 h1:/6XgwoyLwwPC8HyVjudjeYdEVu7B2YXfXO7fJzWc2Q0=
+github.com/26huitailang/yogo v0.1.2/go.mod h1:wp9/vQYT7ZkrmiSqA+rWIQtzLDlC5J7wSIGneIGYzCc=
 github.com/AlecAivazis/survey/v2 v2.3.5 h1:A8cYupsAZkjaUmhtTYv3sSqc7LO5mp1XDfqe5E/9wRQ=
 github.com/AlecAivazis/survey/v2 v2.3.5/go.mod h1:4AuI9b7RjAR+G7v9+C4YSlX/YL3K3cWNXgWXOhllqvI=
 github.com/Azure/azure-sdk-for-go/sdk/azcore v0.19.0/go.mod h1:h6H6c8enJmmocHUbLiiGY6sx7f9i+X3m1CHdd5c6Rdw=

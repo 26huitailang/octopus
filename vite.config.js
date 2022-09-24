@@ -17,7 +17,7 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/agent/script': {
+      '/agent': {
         target: 'http://localhost:8072',
         changeOrigin: true,
       },

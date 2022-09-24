@@ -22,5 +22,4 @@ func Routes(r *gin.Engine) {
 
 	demo.Register(r)
 	agent.Register(r)
-
 }

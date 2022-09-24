@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strings"
 
 	"github.com/26huitailang/yogo/framework"
 	"github.com/26huitailang/yogo/framework/contract"
@@ -148,6 +149,39 @@ func (s *Service) RunScript(script []byte, writer io.Writer) error {
 		}
 	}
 	return nil
+}
+
+func (s *Service) ListScript() ([]string, error) {
+	container := s.c.MustMake(contract.AppKey).(contract.App)
+	storageFolder := container.StorageFolder()
+	scriptsFolder := path.Join(storageFolder, "scripts")
+	files, err := os.ReadDir(scriptsFolder)
+	if err != nil {
+		return nil, err
+	}
+	ret := []string{}
+	for _, f := range files {
+		if f.IsDir() {
+			continue
+		}
+		if strings.HasPrefix(f.Name(), ".") {
+			continue
+		}
+		ret = append(ret, f.Name())
+	}
+	return ret, nil
+}
+
+func (s *Service) DetailScript(name string) ([]byte, error) {
+	container := s.c.MustMake(contract.AppKey).(contract.App)
+	storageFolder := container.StorageFolder()
+	scriptsFolder := path.Join(storageFolder, "scripts")
+	file := path.Join(scriptsFolder, name)
+	content, err := os.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+	return content, nil
 }
 
 var systemdServiceTmpl = `
