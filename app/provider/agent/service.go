@@ -1,7 +1,6 @@
 package agent
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"html/template"
@@ -13,7 +12,6 @@ import (
 
 	"github.com/26huitailang/yogo/framework"
 	"github.com/26huitailang/yogo/framework/contract"
-	"github.com/google/shlex"
 )
 
 type Service struct {
@@ -120,33 +118,35 @@ func (s *Service) Status() error {
 }
 
 func (s *Service) RunScript(script []byte, writer io.Writer) error {
+	appContainer := s.c.MustMake(contract.AppKey).(contract.App)
 	logger := s.c.MustMake(contract.LogKey).(contract.Log)
 	logger.Debug(context.TODO(), "got script, start parse", map[string]interface{}{"scirpt": string(script)})
-	cmds := bytes.Split(script, []byte("\n"))
-	for _, cmd := range cmds {
-		ret, err := shlex.Split(string(cmd))
-		if err != nil {
-			return err
-		}
-		var command *exec.Cmd
-		logger.Debug(context.TODO(), "get command", map[string]interface{}{"ret": ret})
-		if len(ret) == 0 {
-			continue
-		} else if len(ret) == 1 {
-			command = exec.Command(ret[0])
-		} else {
-			command = exec.Command(ret[0], ret[1:]...)
-		}
-		out, err := command.CombinedOutput()
-		if err != nil {
-			logger.Error(context.TODO(), "out:", map[string]interface{}{"out": string(out), "cmd": cmd})
-			return err
-		}
-		n, err := writer.Write(out)
-		logger.Debug(context.TODO(), "out:", map[string]interface{}{"out": string(out), "cmd": string(cmd), "n": n})
-		if err != nil {
-			return err
-		}
+	f, err := os.CreateTemp(appContainer.RuntimeFolder(), "script-*.sh")
+	logger.Debug(context.TODO(), "temp script", map[string]interface{}{"file": f.Name()})
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	defer os.Remove(f.Name())
+
+	_, err = f.Write(script)
+	if err != nil {
+		return err
+	}
+
+	var command *exec.Cmd
+	command = exec.Command("chmod", "+x", f.Name())
+	_ = command.Run()
+	command = exec.Command("bash", "-c", f.Name())
+	out, err := command.CombinedOutput()
+	if err != nil {
+		logger.Error(context.TODO(), "out:", map[string]interface{}{"out": string(out), "cmd": string(script)})
+		return err
+	}
+	n, err := writer.Write(out)
+	logger.Debug(context.TODO(), "out:", map[string]interface{}{"out": string(out), "cmd": string(script), "n": n})
+	if err != nil {
+		return err
 	}
 	return nil
 }
