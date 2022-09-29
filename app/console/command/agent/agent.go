@@ -1,7 +1,9 @@
 package agent
 
 import (
+	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/26huitailang/octopus/app/provider/agent"
 	"github.com/26huitailang/yogo/framework/cobra"
@@ -11,6 +13,7 @@ func InitAgentCommand() *cobra.Command {
 	AgentCommand.AddCommand(AgentRegisterLocalCommand)
 	AgentCommand.AddCommand(AgentStatusCommand)
 	AgentCommand.AddCommand(AgentRunScriptCommand)
+	AgentCommand.AddCommand(AgentPackageCommand)
 	return AgentCommand
 }
 
@@ -71,5 +74,25 @@ var AgentRunScriptCommand = &cobra.Command{
 			return err
 		}
 		return nil
+	},
+}
+
+var AgentPackageCommand = &cobra.Command{
+	Use:   "package",
+	Short: "package agent into a tar.gz file",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) == 0 {
+			cmd.Help()
+			return nil
+		}
+		path := args[0]
+		command := exec.Command("tar", "-cf", path, "dist", ".env", "octopus", "config")
+		out, err := command.CombinedOutput()
+		fmt.Println(string(out))
+		if err != nil {
+			return err
+		}
+		return nil
+
 	},
 }

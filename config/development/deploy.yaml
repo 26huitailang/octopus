@@ -11,8 +11,8 @@ frontend: # 前端部署配置
 
 backend: # 后端部署配置
   bin: "octopus" # 自定义构建二进制文件名，默认yogo
-  use_docker: false # 使用docker的命令
-  image: golang:1.18-rc
+  use_docker: true # 使用docker的命令
+  image: centos78go:latest
   goos: linux # 部署目标操作系统
   goarch: amd64 # 部署目标cpu架构
   cgo: 1 # CGO_ENABLED
