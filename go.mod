@@ -3,9 +3,8 @@ module github.com/26huitailang/octopus
 go 1.19
 
 require (
-	github.com/26huitailang/yogo v0.1.2
+	github.com/26huitailang/yogo v0.1.3
 	github.com/gin-contrib/cors v1.4.0
-	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/stretchr/testify v1.8.0
 	github.com/swaggo/swag v1.7.3
 )
@@ -45,6 +44,7 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-github/v39 v39.2.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
+	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/go-version v1.6.0 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
